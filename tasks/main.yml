@@ -44,6 +44,28 @@
   notify:
     - Reload docker
   when: docker_opts != "" and ansible_distribution_version|version_compare(15.04, '<')
+  
+- name: Set http proxy
+  lineinfile: 
+    dest: /etc/default/docker
+    line: "export http_proxy={{ http_proxy }}"
+    regexp: "^export http_proxy"
+    state: present
+    insertbefore: BOF
+  notify:
+    - Reload docker
+  when: http_proxy != "" and ansible_distribution_version|version_compare(15.04, '<')
+  
+- name: Set https proxy
+  lineinfile: 
+    dest: /etc/default/docker
+    line: "export https_proxy={{ https_proxy }}"
+    regexp: "^export https_proxy"
+    state: present
+    insertbefore: BOF
+  notify:
+    - Reload docker
+  when: https_proxy != "" and ansible_distribution_version|version_compare(15.04, '<')
 
 - name: Create systemd configuration directory for Docker service (systemd)
   file: 
@@ -77,6 +99,28 @@
     - Reload systemd
     - Restart docker
   when: docker_opts != "" and ansible_distribution_version|version_compare(15.04, '>=')
+  
+- name: Set http proxy (systemd)
+  lineinfile: 
+    dest: /lib/systemd/system/docker.service
+    line: 'Environment="HTTP_PROXY={{ http_proxy }}"'
+    regexp: "^Environment=\"HTTP_PROXY"
+    state: present
+    insertbefore: BOF
+  notify:
+    - Reload docker
+  when: http_proxy != "" and ansible_distribution_version|version_compare(15.04, '>=')
+  
+- name: Set https proxy (systemd)
+  lineinfile: 
+    dest: /lib/systemd/system/docker.service
+    line: 'Environment="HTTPS_PROXY={{ httsp_proxy }}"'
+    regexp: "^Environment=\"HTTPS_PROXY"
+    state: present
+    insertbefore: BOF
+  notify:
+    - Reload docker
+  when: https_proxy != "" and ansible_distribution_version|version_compare(15.04, '>=')
 
 - name: Fix DNS in docker.io
   lineinfile:
