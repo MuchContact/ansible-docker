@@ -114,7 +114,7 @@
 - name: Set https proxy (systemd)
   lineinfile: 
     dest: /lib/systemd/system/docker.service
-    line: 'Environment="HTTPS_PROXY={{ httsp_proxy }}"'
+    line: 'Environment="HTTPS_PROXY={{ https_proxy }}"'
     regexp: "^Environment=\"HTTPS_PROXY"
     state: present
     insertbefore: BOF
