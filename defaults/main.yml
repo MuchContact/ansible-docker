@@ -50,3 +50,5 @@ install_kernel_extras: false
 # where an X/Unit desktop is actively being used. If you're not using an X/Unity on 12.04, you
 # won't need to enable this.
 install_xorg_pkgs: false
+http_proxy: ""
+https_proxy: ""
